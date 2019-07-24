@@ -10,5 +10,5 @@ package invoicemapper;
  * @author johnk
  */
 public class InvoiceMapper {
-    
+     
 }
