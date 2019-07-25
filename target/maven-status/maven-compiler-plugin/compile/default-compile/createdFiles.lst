@@ -1,0 +1,15 @@
+invoicemapper\InvoiceMapper.class
+invoicemapper\ReportGenerator.class
+invoicemapper\dal\AgentDataService.class
+invoicemapper\dal\DataService.class
+invoicemapper\App.class
+invoicemapper\lib\Sale.class
+invoicemapper\CsvInvoiceImporter.class
+invoicemapper\dal\ClientDataService.class
+invoicemapper\lib\Agent.class
+invoicemapper\lib\Client.class
+invoicemapper\dal\SaleDataService.class
+invoicemapper\lib\FormatMap.class
+invoicemapper\dal\InvoiceDataService.class
+invoicemapper\lib\Invoice.class
+invoicemapper\dal\FormatMapDataService.class
