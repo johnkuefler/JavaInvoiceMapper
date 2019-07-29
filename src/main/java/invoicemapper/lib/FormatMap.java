@@ -32,7 +32,16 @@ public class FormatMap {
     private int flex4Column;
     private int flex5Column;
     private int amountColumn;
-
+    private float commissionRate;
+    
+    public float getCommissionRate() {
+        return commissionRate;
+    }
+    
+    public void setCommissionRate(float commissionRate) {
+        this.commissionRate = commissionRate;
+    }
+    
     public int getAgentIdColumn() {
         return agentIdColumn;
     }
