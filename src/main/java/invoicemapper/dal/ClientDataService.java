@@ -6,6 +6,7 @@
 package invoicemapper.dal;
 
 import invoicemapper.lib.Client;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,9 +25,8 @@ public class ClientDataService extends DataService {
      public ArrayList<Client> GetAll() throws SQLException {
         ArrayList<Client> output = new ArrayList<Client>();
          
-        String selectSql = "SELECT * FROM IM_Client";
-        Statement statement = super.getConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery(selectSql);
+        PreparedStatement statement = super.getConnection().prepareStatement("SELECT * FROM IM_Client");
+        ResultSet resultSet = statement.executeQuery();
         
         while (resultSet.next())
         {
@@ -39,9 +39,10 @@ public class ClientDataService extends DataService {
     }
      
     public Client GetByName(String name) throws SQLException {
-        String selectSql = "SELECT * FROM IM_Client WHERE Name = '"+name+"'";
-        Statement statement = super.getConnection().createStatement();
-        ResultSet resultSet = statement.executeQuery(selectSql);
+        
+        PreparedStatement statement = super.getConnection().prepareStatement("SELECT * FROM IM_Client WHERE Name = ?");
+        statement.setString(1, name);
+        ResultSet resultSet = statement.executeQuery();
         
         while (resultSet.next())
         {
@@ -53,9 +54,10 @@ public class ClientDataService extends DataService {
     }
     
     public Client Create(Client newClient) throws SQLException {
-        String insertSql = "INSERT INTO IM_Client (Name) VALUES ('"+newClient.getName()+"')";
-        Statement statement = super.getConnection().createStatement();
-        statement.executeUpdate(insertSql);
+       
+        PreparedStatement statement = super.getConnection().prepareStatement("INSERT INTO IM_Client (Name) VALUES (?)");
+        statement.setString(1, newClient.getName());
+        statement.executeUpdate();
         
         return GetByName(newClient.getName());
     }
@@ -66,11 +68,8 @@ public class ClientDataService extends DataService {
     }
      
     public void Delete(String clientName) throws SQLException {
-       Statement deleteStatement = super.getConnection().createStatement();
-
-        String sql = "DELETE FROM IM_Client "
-                + " WHERE name = '" + clientName+"'";
-
-        deleteStatement.executeUpdate(sql);
+        PreparedStatement statement = super.getConnection().prepareStatement("DELETE FROM IM_Client WHERE name = ?");
+        statement.setString(1, clientName);
+        statement.executeUpdate();
     }
 }
