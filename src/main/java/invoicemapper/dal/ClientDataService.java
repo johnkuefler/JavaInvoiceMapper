@@ -31,7 +31,7 @@ public class ClientDataService extends DataService {
         while (resultSet.next())
         {
             Client client = new Client();
-            client.setName(resultSet.getString(2));
+            client.setName(resultSet.getString(1));
             output.add(client);
         }
 
