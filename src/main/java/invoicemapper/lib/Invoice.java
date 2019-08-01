@@ -12,19 +12,12 @@ import java.util.Date;
  * @author johnk
  */
 public class Invoice {
-    private int id;
+    private String clientName;
     private Date date;
     private float amount;
-    private Client client;
+    private float revenue;
     
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+   
     public Date getDate() {
         return date;
     }
@@ -40,12 +33,20 @@ public class Invoice {
     public void setAmount(float amount) {
         this.amount = amount;
     }
-
-    public Client getClient() {
-        return client;
+    
+    public float getRevenue() {
+        return revenue;
+    }
+    
+    public void setRevenue(float revenue) {
+        this.revenue = revenue;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 }

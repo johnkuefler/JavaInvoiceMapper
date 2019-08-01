@@ -35,7 +35,6 @@ public class CsvInvoiceImporter {
             String[] rowValues = scanner.next().split(",");
             
             Sale sale = new Sale();
-            sale.setInvoiceId(invoice.getId());
             sale.setAgentId(Integer.parseInt(rowValues[this.formatMap.getAgentIdColumn()]));
             sale.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(rowValues[this.formatMap.getDateColumn()]));
             sale.setCustomerName(rowValues[this.formatMap.getCustomerNameColumn()]);
