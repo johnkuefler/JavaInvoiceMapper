@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,22 +28,23 @@ public class ManageAgentsUI extends javax.swing.JFrame {
     private ArrayList<Client> clients;
     private ClientDataService clientDataService;
     private AgentDataService agentDataService;
-    
+    private Agent selectedAgent;
+
     /**
      * Creates new form ManageAgentsUI
      */
     public ManageAgentsUI() throws SQLException {
         initComponents();
-        
+
         clientDataService = new ClientDataService();
         clients = new ArrayList<Client>();
-        
+
         agentDataService = new AgentDataService();
-        
+
         fetchClients();
         fetchAgentsForSelectedClient();
     }
-    
+
     public void fetchClients() throws SQLException {
         clients = clientDataService.GetAll();
 
@@ -53,23 +55,23 @@ public class ManageAgentsUI extends javax.swing.JFrame {
 
         clientSelect.setModel(dml);
     }
-    
+
     public void fetchAgentsForSelectedClient() throws SQLException {
         String selectedClient = String.valueOf(clientSelect.getSelectedItem());
-      
+
         ArrayList<Agent> clientAgents = agentDataService.GetByClientName(selectedClient);
-        
+
         DefaultListModel listModel = new DefaultListModel();
-        
-        for (Agent a : clientAgents) 
-        { 
+
+        listModel.addElement("Create New");
+
+        for (Agent a : clientAgents) {
             listModel.addElement(a.getId() + "-" + a.getFirstName() + " " + a.getLastName());
         }
 
         agentListBox.setModel(listModel);
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -121,6 +123,11 @@ public class ManageAgentsUI extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        agentListBox.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                agentListBoxValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(agentListBox);
 
         agentIdText.addActionListener(new java.awt.event.ActionListener() {
@@ -149,6 +156,11 @@ public class ManageAgentsUI extends javax.swing.JFrame {
 
         createUpdateButton.setText("Create/Update");
         createUpdateButton.setToolTipText("");
+        createUpdateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createUpdateButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -168,23 +180,33 @@ public class ManageAgentsUI extends javax.swing.JFrame {
                                 .addGap(38, 38, 38)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 76, Short.MAX_VALUE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(agentIdText, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(firstNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lastNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(createUpdateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(105, 105, 105))))
+                                .addComponent(createUpdateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(105, 105, 105))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(agentIdText, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+                                                .addGap(71, 71, 71))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addGap(18, 18, 18)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(firstNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lastNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(80, 80, 80))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,7 +245,7 @@ public class ManageAgentsUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-           new MainUI().setVisible(true);
+        new MainUI().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
@@ -246,6 +268,65 @@ public class ManageAgentsUI extends javax.swing.JFrame {
             Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_clientSelectActionPerformed
+
+    private void agentListBoxValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_agentListBoxValueChanged
+        String agentText = (String) agentListBox.getSelectedValue();
+
+        if (agentText != null) {
+            if (agentText == "Create New") {
+                selectedAgent = new Agent();
+                agentIdText.setText("");
+                firstNameText.setText("");
+                lastNameText.setText("");
+            } else {
+                String agentId = agentText.split("-", 2)[0];
+                try {
+                    selectedAgent = agentDataService.GetById(agentId);
+                    agentIdText.setText(selectedAgent.getId());
+                    firstNameText.setText(selectedAgent.getFirstName());
+                    lastNameText.setText(selectedAgent.getLastName());
+                } catch (SQLException ex) {
+                    Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_agentListBoxValueChanged
+
+    private void createUpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createUpdateButtonActionPerformed
+
+        String agentText = (String) agentListBox.getSelectedValue();
+
+        if (agentText == "Create New") {
+            selectedAgent.setId(agentIdText.getText());
+            selectedAgent.setFirstName(firstNameText.getText());
+            selectedAgent.setLastName(lastNameText.getText());
+
+            String selectedClient = String.valueOf(clientSelect.getSelectedItem());
+            selectedAgent.setClientName(selectedClient);
+            try {
+                agentDataService.Create(selectedAgent);
+                JOptionPane.showMessageDialog(this, "Agent created");
+            } catch (SQLException ex) {
+                Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            selectedAgent.setFirstName(firstNameText.getText());
+            selectedAgent.setLastName(lastNameText.getText());
+
+            try {
+                agentDataService.Update(selectedAgent);
+                JOptionPane.showMessageDialog(this, "Agent updated");
+            } catch (SQLException ex) {
+                Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        try {
+            fetchAgentsForSelectedClient();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_createUpdateButtonActionPerformed
 
     /**
      * @param args the command line arguments
