@@ -5,19 +5,71 @@
  */
 package invoicemapper.ui;
 
+import invoicemapper.dal.AgentDataService;
+import invoicemapper.dal.ClientDataService;
+import invoicemapper.dal.FormatMapDataService;
+import invoicemapper.lib.Agent;
+import invoicemapper.lib.Client;
+import invoicemapper.lib.FormatMap;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author johnk
  */
 public class ManageAgentsUI extends javax.swing.JFrame {
 
+    private ArrayList<Client> clients;
+    private ClientDataService clientDataService;
+    private AgentDataService agentDataService;
+    
     /**
      * Creates new form ManageAgentsUI
      */
-    public ManageAgentsUI() {
+    public ManageAgentsUI() throws SQLException {
         initComponents();
+        
+        clientDataService = new ClientDataService();
+        clients = new ArrayList<Client>();
+        
+        agentDataService = new AgentDataService();
+        
+        fetchClients();
+        fetchAgentsForSelectedClient();
     }
+    
+    public void fetchClients() throws SQLException {
+        clients = clientDataService.GetAll();
 
+        DefaultComboBoxModel dml = new DefaultComboBoxModel();
+        for (int i = 0; i < clients.size(); i++) {
+            dml.addElement(clients.get(i).getName());
+        }
+
+        clientSelect.setModel(dml);
+    }
+    
+    public void fetchAgentsForSelectedClient() throws SQLException {
+        String selectedClient = String.valueOf(clientSelect.getSelectedItem());
+      
+        ArrayList<Agent> clientAgents = agentDataService.GetByClientName(selectedClient);
+        
+        DefaultListModel listModel = new DefaultListModel();
+        
+        for (Agent a : clientAgents) 
+        { 
+            listModel.addElement(a.getId() + "-" + a.getFirstName() + " " + a.getLastName());
+        }
+
+        agentListBox.setModel(listModel);
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -56,7 +108,11 @@ public class ManageAgentsUI extends javax.swing.JFrame {
 
         jLabel2.setText("Client");
 
-        clientSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        clientSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clientSelectActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Agents");
 
@@ -67,21 +123,18 @@ public class ManageAgentsUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(agentListBox);
 
-        agentIdText.setText("jTextField1");
         agentIdText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 agentIdTextActionPerformed(evt);
             }
         });
 
-        firstNameText.setText("jTextField1");
         firstNameText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 firstNameTextActionPerformed(evt);
             }
         });
 
-        lastNameText.setText("jTextField1");
         lastNameText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lastNameTextActionPerformed(evt);
@@ -123,8 +176,8 @@ public class ManageAgentsUI extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE))
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 76, Short.MAX_VALUE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(agentIdText, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -163,7 +216,7 @@ public class ManageAgentsUI extends javax.swing.JFrame {
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(createUpdateButton)))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         pack();
@@ -185,6 +238,14 @@ public class ManageAgentsUI extends javax.swing.JFrame {
     private void lastNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastNameTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_lastNameTextActionPerformed
+
+    private void clientSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientSelectActionPerformed
+        try {
+            fetchAgentsForSelectedClient();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_clientSelectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -216,7 +277,11 @@ public class ManageAgentsUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ManageAgentsUI().setVisible(true);
+                try {
+                    new ManageAgentsUI().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

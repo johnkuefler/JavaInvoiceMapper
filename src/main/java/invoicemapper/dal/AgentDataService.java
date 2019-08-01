@@ -31,10 +31,10 @@ public class AgentDataService extends DataService {
         while (resultSet.next()) {
             Agent agent = new Agent();
 
-            agent.setId(resultSet.getString(0));
-            agent.setClientName(resultSet.getString(1));
-            agent.setFirstName(resultSet.getString(2));
-            agent.setLastName(resultSet.getString(3));
+            agent.setId(resultSet.getString(1));
+            agent.setClientName(resultSet.getString(2));
+            agent.setFirstName(resultSet.getString(3));
+            agent.setLastName(resultSet.getString(4));
 
             output.add(agent);
         }
@@ -51,10 +51,10 @@ public class AgentDataService extends DataService {
         while (resultSet.next()) {
             Agent agent = new Agent();
 
-            agent.setId(resultSet.getString(0));
-            agent.setClientName(resultSet.getString(1));
-            agent.setFirstName(resultSet.getString(2));
-            agent.setLastName(resultSet.getString(3));
+            agent.setId(resultSet.getString(1));
+            agent.setClientName(resultSet.getString(2));
+            agent.setFirstName(resultSet.getString(3));
+            agent.setLastName(resultSet.getString(4));
 
             return agent;
         }

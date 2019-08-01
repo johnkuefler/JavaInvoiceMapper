@@ -138,7 +138,11 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_manageClientsButtonActionPerformed
 
     private void agentsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agentsButtonActionPerformed
- new ManageAgentsUI().setVisible(true);
+        try {
+            new ManageAgentsUI().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
             this.dispose();    }//GEN-LAST:event_agentsButtonActionPerformed
 
     /**
