@@ -5,10 +5,12 @@
  */
 package invoicemapper.ui;
 
+import invoicemapper.CommissionCalculator;
 import invoicemapper.CsvInvoiceImporter;
 import invoicemapper.dal.ClientDataService;
 import invoicemapper.dal.FormatMapDataService;
 import invoicemapper.dal.InvoiceDataService;
+import invoicemapper.dal.SaleDataService;
 import invoicemapper.lib.Client;
 import invoicemapper.lib.FormatMap;
 import invoicemapper.lib.Invoice;
@@ -34,6 +36,7 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
 
     private ArrayList<Client> clients;
     private ClientDataService clientDataService;
+    private SaleDataService saleDataService;
     
     private File selectedFile;
     
@@ -45,6 +48,7 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
         
         clients = new ArrayList<Client>();
         clientDataService = new ClientDataService();
+        saleDataService = new SaleDataService();
         
         fetchClients();
     }
@@ -140,7 +144,6 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
                         .addContainerGap(96, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(backButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -148,7 +151,8 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3))
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(clientSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -165,19 +169,17 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
                     .addComponent(backButton)
                     .addComponent(jLabel1))
                 .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(clientSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(amountText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(clientSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(amountText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chooseFileButton)
@@ -245,16 +247,31 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
         try {
             ArrayList<Sale> sales = importer.ImportSalesForInvoice(invoice, selectedFile.getAbsolutePath());
             
-            // todo: set up sales database
+            // calculate the commissions for all the sales, sum up as we go
+            float totalCommissionsPaid = 0;
+            for (Sale s : sales) {
+                CommissionCalculator calc = new CommissionCalculator(format.getCommissionRate(), s);
+                
+                s.setCommission(calc.getCommissionAmount());
+                
+                totalCommissionsPaid += s.getCommission();
+            }
+           
+            // revenue calculation for invoice
+            invoice.setRevenue(invoice.getAmount() - totalCommissionsPaid);
             
-            // todo: make a commission calculator class we can unit test, loop through sales and calc commissions
+            // save it all
+            invoiceDataService.UpdateRevenue(invoice.getDate(), invoice.getClientName(), invoice.getAmount());
             
-            // todo: update the invoice with the revenue
-            
+            for (Sale s: sales) {
+                saleDataService.Create(s);
+            }
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
+            Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_uploadButtonActionPerformed
