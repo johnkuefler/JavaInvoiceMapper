@@ -11,10 +11,10 @@ import java.util.Date;
  *
  * @author johnk
  */
-public class Sale {
+public class Sale {   
     private Date invoiceDate;
     private String clientName;
-    private int agentId;
+    private String agentId;
     private Date date;
     private String customerName;
     private String customerAddress;
@@ -36,11 +36,11 @@ public class Sale {
     private float amount;
     private float commission;
 
-    public int getAgentId() {
+    public String getAgentId() {
         return agentId;
     }
 
-    public void setAgentId(int agentId) {
+    public void setAgentId(String agentId) {
         this.agentId = agentId;
     }
 
