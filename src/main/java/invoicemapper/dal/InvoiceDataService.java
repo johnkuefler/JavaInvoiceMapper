@@ -27,7 +27,7 @@ public class InvoiceDataService extends DataService {
      public ArrayList<Invoice> GetAll() throws SQLException {
         ArrayList<Invoice> output = new ArrayList<Invoice>();
          
-        PreparedStatement statement = super.getConnection().prepareStatement("SELECT (ClientName, Date, Amount, Revenue) FROM IM_Invoice");
+        PreparedStatement statement = super.getConnection().prepareStatement("SELECT ClientName, Date, Amount, Revenue FROM IM_Invoice");
         ResultSet resultSet = statement.executeQuery();
         
         while (resultSet.next())
@@ -42,6 +42,27 @@ public class InvoiceDataService extends DataService {
 
         return output;
     }
+     
+      public ArrayList<Invoice> GetByClient(String clientName) throws SQLException {
+        ArrayList<Invoice> output = new ArrayList<Invoice>();
+         
+        PreparedStatement statement = super.getConnection().prepareStatement("SELECT ClientName, Date, Amount, Revenue FROM IM_Invoice WHERE ClientName = ?");
+        statement.setString(1, clientName);
+        ResultSet resultSet = statement.executeQuery();
+        
+        while (resultSet.next())
+        {
+            Invoice invoice = new Invoice();
+            invoice.setClientName(resultSet.getString(1));
+            invoice.setDate(resultSet.getDate(2));
+            invoice.setAmount(resultSet.getFloat(3));
+            invoice.setRevenue(resultSet.getFloat(4));
+            output.add(invoice);
+        }
+
+        return output;
+    }
+     
     
     public void Create(Invoice newInvoice) throws SQLException {
         PreparedStatement statement = super.getConnection().prepareStatement("INSERT INTO IM_Invoice (ClientName, Date, Amount, Revenue) "
