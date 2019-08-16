@@ -11,7 +11,7 @@ package invoicemapper;
  */
 public class Utilities {
     public static boolean ParseBool(String input) {
-        if (input == "Yes" || input == "yes") {
+        if (input.equalsIgnoreCase("yes")) {
             return true;
         }
         else {

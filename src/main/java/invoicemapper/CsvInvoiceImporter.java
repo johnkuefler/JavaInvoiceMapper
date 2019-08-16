@@ -31,18 +31,12 @@ public class CsvInvoiceImporter {
         ArrayList<Sale> output = new ArrayList<Sale>();
 
         Scanner scanner = new Scanner(new File(csvPath));
-        scanner.useDelimiter("\n");
+        scanner.useDelimiter("\r\n");
 
-        int rowCounter = 0;
+        // skip header
+        scanner.nextLine();
+        
         while (scanner.hasNext()) {
-            // skip header row
-            if (rowCounter == 0) {
-                rowCounter++;
-                continue;
-            } else {            
-                rowCounter++;
-            }
-
             String[] rowValues = scanner.next().split(",");
 
             Sale sale = new Sale();
@@ -50,7 +44,7 @@ public class CsvInvoiceImporter {
             sale.setClientName(invoice.getClientName());
 
             sale.setAgentId((rowValues[this.formatMap.getAgentIdColumn()]));          
-            sale.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(rowValues[this.formatMap.getDateColumn()]));
+            sale.setDate(new SimpleDateFormat("MM/dd/yyyy").parse(rowValues[this.formatMap.getDateColumn()]));
             sale.setCustomerName(rowValues[this.formatMap.getCustomerNameColumn()]);
             sale.setCustomerAddress(rowValues[this.formatMap.getCustomerAddressColumn()]);
             sale.setCustomerCity(rowValues[this.formatMap.getCustomerCityColumn()]);

@@ -37,7 +37,8 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
     private ArrayList<Client> clients;
     private ClientDataService clientDataService;
     private SaleDataService saleDataService;
-    
+    private InvoiceDataService invoiceDataService;
+
     private File selectedFile;
     
     /**
@@ -49,6 +50,7 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
         clients = new ArrayList<Client>();
         clientDataService = new ClientDataService();
         saleDataService = new SaleDataService();
+        invoiceDataService = new InvoiceDataService();
         
         fetchClients();
     }
@@ -228,20 +230,13 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
         Invoice invoice = new Invoice();
         
         try {
-            invoice.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(dateText.getText()));
+            invoice.setDate(new SimpleDateFormat("MM/dd/yyyy").parse(dateText.getText()));
         } catch (ParseException ex) {
             Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         invoice.setClientName(selectedClient);
         invoice.setAmount(Float.parseFloat(amountText.getText()));
-        
-        InvoiceDataService invoiceDataService = new InvoiceDataService();
-        try {
-            invoiceDataService.Create(invoice);
-        } catch (SQLException ex) {
-            Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
         CsvInvoiceImporter importer = new CsvInvoiceImporter(format);
         try {
@@ -260,12 +255,13 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
             // revenue calculation for invoice
             invoice.setRevenue(invoice.getAmount() - totalCommissionsPaid);
             
-            // save it all
-            invoiceDataService.UpdateRevenue(invoice.getDate(), invoice.getClientName(), invoice.getAmount());
-            
+            invoiceDataService.Create(invoice);
+                   
             for (Sale s: sales) {
                 saleDataService.Create(s);
             }
+            
+            JOptionPane.showMessageDialog(this, "Invoice imported successfully!");
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
