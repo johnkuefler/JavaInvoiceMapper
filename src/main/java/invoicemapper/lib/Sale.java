@@ -11,10 +11,10 @@ import java.util.Date;
  *
  * @author johnk
  */
-public class Sale {
-    private int id;
-    private int invoiceId;
-    private int agentId;
+public class Sale {   
+    private Date invoiceDate;
+    private String clientName;
+    private String agentId;
     private Date date;
     private String customerName;
     private String customerAddress;
@@ -34,28 +34,13 @@ public class Sale {
     private String flex4;
     private String flex5;
     private float amount;
+    private float commission;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getInvoiceId() {
-        return invoiceId;
-    }
-
-    public void setInvoiceId(int invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
-    public int getAgentId() {
+    public String getAgentId() {
         return agentId;
     }
 
-    public void setAgentId(int agentId) {
+    public void setAgentId(String agentId) {
         this.agentId = agentId;
     }
 
@@ -209,5 +194,33 @@ public class Sale {
 
     public void setAmount(float amount) {
         this.amount = amount;
+    }
+    
+     public float getCommission() {
+        return commission;
+    }
+
+    public void setCommission(float commission) {
+        this.commission = commission;
+    }
+
+
+    public Date getInvoiceDate() {
+        return invoiceDate;
+    }
+
+
+    public void setInvoiceDate(Date invoiceDate) {
+        this.invoiceDate = invoiceDate;
+    }
+
+   
+    public String getClientName() {
+        return clientName;
+    }
+
+  
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 }

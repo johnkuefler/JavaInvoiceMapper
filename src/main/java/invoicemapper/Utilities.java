@@ -9,6 +9,13 @@ package invoicemapper;
  *
  * @author johnk
  */
-public class InvoiceMapper {
-     
+public class Utilities {
+    public static boolean ParseBool(String input) {
+        if (input.equalsIgnoreCase("yes")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
