@@ -5,11 +5,14 @@
  */
 package invoicemapper.dal;
 
+import invoicemapper.lib.Client;
 import invoicemapper.lib.Sale;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -21,9 +24,135 @@ public class SaleDataService extends DataService {
         super();
     }
     
-    public ArrayList<Sale> GetByInvoiceId(int invoiceId) throws SQLException {
-         // todo: implement
-        return null;
+    public ArrayList<Sale> GetByInvoice(String clientName, Date invoiceDate) throws SQLException {
+         ArrayList<Sale> output = new ArrayList<Sale>();
+          
+        PreparedStatement statement = super.getConnection().prepareStatement("SELECT "+
+                "InvoiceDate, " +
+                "ClientName, " +
+                "AgentId, " +
+                "Date, " +
+                "CustomerName, " +
+                "CustomerAddress, " +
+                "CustomerCity, " +
+                "CustomerState, " +
+                "CustomerZip, " +
+                "Status, " +
+                "StatusReason, " +
+                "Payable, " +
+                "Chargeback, " +
+                "Usage, " +
+                "UtilityAccountNumber, " +
+                "VerificationNumber, " +
+                "Flex1, " +
+                "Flex2, " +
+                "Flex3, " +
+                "Flex4, " +
+                "Flex5, " +
+                "Amount, " +
+                "Commission " +
+                "FROM IM_Sale WHERE ClientName = ? AND InvoiceDate = ?");
+      statement.setString(1, clientName);
+      statement.setDate(2, new java.sql.Date(invoiceDate.getTime()));
+
+       ResultSet resultSet = statement.executeQuery();
+        
+        while (resultSet.next())
+        {
+            Sale s = new Sale();
+            s.setInvoiceDate(resultSet.getDate(1));
+            s.setClientName(resultSet.getString(2));
+            s.setAgentId(resultSet.getString(3));
+            s.setDate(resultSet.getDate(4));
+            s.setCustomerName(resultSet.getString(5));
+            s.setCustomerAddress(resultSet.getString(6));
+            s.setCustomerCity(resultSet.getString(7));
+            s.setCustomerState(resultSet.getString(8));
+            s.setCustomerZip(resultSet.getString(9));
+            s.setStatus(resultSet.getString(10));
+            s.setStatusReason(resultSet.getString(11));
+            s.setPayable(resultSet.getBoolean(12));
+            s.setChargeback(resultSet.getBoolean(13));
+            s.setUsage(resultSet.getString(14));
+            s.setUtilityAccountNumber(resultSet.getString(15));
+            s.setVerificationNumber(resultSet.getString(16));
+            s.setFlex1(resultSet.getString(17));
+            s.setFlex2(resultSet.getString(18));
+            s.setFlex3(resultSet.getString(19));
+            s.setFlex4(resultSet.getString(20));
+            s.setFlex5(resultSet.getString(21));
+            s.setAmount(resultSet.getFloat(22));
+            s.setCommission(resultSet.getFloat(23));
+
+            output.add(s);
+        }
+
+        return output;
+    }
+    
+      public ArrayList<Sale> GetByAgentId(String agentId) throws SQLException {
+          ArrayList<Sale> output = new ArrayList<Sale>();
+          
+        PreparedStatement statement = super.getConnection().prepareStatement("SELECT "+
+                "InvoiceDate, " +
+                "ClientName, " +
+                "AgentId, " +
+                "Date, " +
+                "CustomerName, " +
+                "CustomerAddress, " +
+                "CustomerCity, " +
+                "CustomerState, " +
+                "CustomerZip, " +
+                "Status, " +
+                "StatusReason, " +
+                "Payable, " +
+                "Chargeback, " +
+                "Usage, " +
+                "UtilityAccountNumber, " +
+                "VerificationNumber, " +
+                "Flex1, " +
+                "Flex2, " +
+                "Flex3, " +
+                "Flex4, " +
+                "Flex5, " +
+                "Amount, " +
+                "Commission " +
+                "FROM IM_Sale WHERE AgentId = ?");
+        statement.setString(1, agentId);
+
+       ResultSet resultSet = statement.executeQuery();
+        
+        while (resultSet.next())
+        {
+            Sale s = new Sale();
+            s.setInvoiceDate(resultSet.getDate(1));
+            s.setClientName(resultSet.getString(2));
+            s.setAgentId(resultSet.getString(3));
+            s.setDate(resultSet.getDate(4));
+            s.setCustomerName(resultSet.getString(5));
+            s.setCustomerAddress(resultSet.getString(6));
+            s.setCustomerCity(resultSet.getString(7));
+            s.setCustomerState(resultSet.getString(8));
+            s.setCustomerZip(resultSet.getString(9));
+            s.setStatus(resultSet.getString(10));
+            s.setStatusReason(resultSet.getString(11));
+            s.setPayable(resultSet.getBoolean(12));
+            s.setChargeback(resultSet.getBoolean(13));
+            s.setUsage(resultSet.getString(14));
+            s.setUtilityAccountNumber(resultSet.getString(15));
+            s.setVerificationNumber(resultSet.getString(16));
+            s.setFlex1(resultSet.getString(17));
+            s.setFlex2(resultSet.getString(18));
+            s.setFlex3(resultSet.getString(19));
+            s.setFlex4(resultSet.getString(20));
+            s.setFlex5(resultSet.getString(21));
+            s.setAmount(resultSet.getFloat(22));
+            s.setCommission(resultSet.getFloat(23));
+
+            output.add(s);
+        }
+
+        return output;
     }
     
     public void Create(Sale newSale) throws SQLException {
