@@ -35,32 +35,25 @@ public class ManageClientsUI extends javax.swing.JFrame {
     
     private void fetchClients() throws SQLException {  
         
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null}
-            },
-            new String [] {
-                "Name"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        
         clients = clientDataService.GetAll();
+        
+         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+       
+         int rowCount = model.getRowCount();
+            //Remove rows one by one from the end of the table
+            for (int i = rowCount - 1; i >= 0; i--) {
+                model.removeRow(i);
+            }
         
         for (int i=0; i<clients.size(); i++) 
         { 
-            jTable1.getModel().setValueAt(clients.get(i).getName(), i, 0);
+            Object[] rowData = new Object[1];
+            rowData[0] = clients.get(i).getName();
+            model.addRow(rowData);
         }
+        
+        
+        jTable1.setModel(model);
     }
     
     
@@ -96,10 +89,7 @@ public class ManageClientsUI extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null}
+
             },
             new String [] {
                 "Name"
