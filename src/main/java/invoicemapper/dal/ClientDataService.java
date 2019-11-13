@@ -68,8 +68,12 @@ public class ClientDataService extends DataService {
     }
      
     public void Delete(String clientName) throws SQLException {
-        PreparedStatement statement = super.getConnection().prepareStatement("DELETE FROM IM_Client WHERE name = ?");
+        PreparedStatement statement = super.getConnection().prepareStatement("DELETE FROM IM_FormatMap WHERE ClientName = ?");
         statement.setString(1, clientName);
         statement.executeUpdate();
+        
+        PreparedStatement statement2 = super.getConnection().prepareStatement("DELETE FROM IM_Client WHERE name = ?");
+        statement2.setString(1, clientName);
+        statement2.executeUpdate();
     }
 }
