@@ -3,9 +3,6 @@
 This is an educational "Legacy" Java app, based on a real world business scenario. 
 It has purposefully been created in a messy state in order to provide students
 an opportunity to refactor and fix bugs in an existing "Legacy" codebase.  
-[![Build Status](https://travis-ci.org/johnkuefler/JavaInvoiceMapper.svg?branch=master)](https://travis-ci.org/johnkuefler/JavaInvoiceMapper)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fd09faa6fa384f50a4b56af435ff6074)](https://www.codacy.com/app/johnkuefler/JavaInvoiceMapper?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=johnkuefler/JavaInvoiceMapper&amp;utm_campaign=Badge_Grade)
-
 
 ### About the Invoice Mapper
 
