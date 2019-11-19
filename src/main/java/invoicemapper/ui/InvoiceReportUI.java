@@ -244,6 +244,13 @@ public class InvoiceReportUI extends javax.swing.JFrame {
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void clientSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientSelectActionPerformed
+        
+        lblTotalSales.setText("0");
+        lblPayable.setText("0");
+        lblNonPayable.setText("0");
+        lblChargebacks.setText("0");
+        lblCommissions.setText("0");
+        
         try {
             fetchInvoicesForSelectedClient();
         } catch (SQLException ex) {
