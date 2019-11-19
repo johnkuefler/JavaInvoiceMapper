@@ -234,7 +234,7 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         invoice.setClientName(selectedClient);
         invoice.setAmount(Float.parseFloat(amountText.getText()));
         
@@ -270,6 +270,7 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        dateText.setText("");
     }//GEN-LAST:event_uploadButtonActionPerformed
 
     /**
