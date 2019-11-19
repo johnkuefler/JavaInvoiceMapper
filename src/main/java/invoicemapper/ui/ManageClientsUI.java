@@ -190,7 +190,7 @@ public class ManageClientsUI extends javax.swing.JFrame {
     private void createClientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createClientButtonActionPerformed
         Client client = new Client();
         client.setName(this.clientNameText.getText());
-        
+        this.clientNameText.setText("");
         try {
             this.clientDataService.Create(client);
             this.fetchClients();
