@@ -263,6 +263,9 @@ public class ManageAgentsUI extends javax.swing.JFrame {
 
     private void clientSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientSelectActionPerformed
         try {
+            agentIdText.setText("");
+            firstNameText.setText("");
+            lastNameText.setText("");
             fetchAgentsForSelectedClient();
         } catch (SQLException ex) {
             Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
