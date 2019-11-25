@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author johnk
- */
+ */ 
 public class ManageClientsUI extends javax.swing.JFrame {
 
     private ArrayList<Client> clients;
@@ -207,6 +207,9 @@ public class ManageClientsUI extends javax.swing.JFrame {
     private void removeClientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeClientButtonActionPerformed
         int rowIndex = jTable1.getSelectedRow();
         String clientName = jTable1.getValueAt(rowIndex,0).toString();
+        if (clientName.isBlank()) {
+            System.out.println("Error: No client selected.");
+        } 
         
         try {
             this.clientDataService.Delete(clientName);
@@ -214,6 +217,11 @@ public class ManageClientsUI extends javax.swing.JFrame {
             this.fetchClients();
         } catch (SQLException ex) {
             Logger.getLogger(ManageClientsUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            finally
+            { if (clientName.isEmpty()) {
+            System.out.println("Error: No client selected."); 
+        };
         }
     }//GEN-LAST:event_removeClientButtonActionPerformed
 
