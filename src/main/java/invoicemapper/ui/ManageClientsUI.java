@@ -209,17 +209,18 @@ public class ManageClientsUI extends javax.swing.JFrame {
         String clientName = jTable1.getValueAt(rowIndex,0).toString();
         
         try {
-            if (clientName == null) {
-            System.out.println("Error: No client selected.");
-        } 
-            else {
-            this.clientDataService.Delete(clientName);
+                this.clientDataService.Delete(clientName);
             
-            this.fetchClients();
-            }
-        } catch (SQLException ex) {
+                this.fetchClients();
+        }
+         catch (SQLException ex) {
             Logger.getLogger(ManageClientsUI.class.getName()).log(Level.SEVERE, null, ex);
             }
+        finally{
+            if (clientName == null) {
+                System.out.println("Error");
+            }
+        }
 
     }//GEN-LAST:event_removeClientButtonActionPerformed
 
