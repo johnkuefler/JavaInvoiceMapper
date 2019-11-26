@@ -207,17 +207,23 @@ public class ManageClientsUI extends javax.swing.JFrame {
     private void removeClientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeClientButtonActionPerformed
         int rowIndex = jTable1.getSelectedRow();
         String clientName = jTable1.getValueAt(rowIndex,0).toString();
-        
-        try {
+        if (clientName == null) {
+            System.out.println("Error: Client not selected.");
+        }
+        else {
+                    try {
                 this.clientDataService.Delete(clientName);
             
                 this.fetchClients();
+                
         }
          catch (SQLException ex) {
             Logger.getLogger(ManageClientsUI.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Client not selected");
-            System.out.println(ex.getMessage());
+
             }
+        }
+        
+
 
     }//GEN-LAST:event_removeClientButtonActionPerformed
 
