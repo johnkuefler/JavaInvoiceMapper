@@ -215,12 +215,9 @@ public class ManageClientsUI extends javax.swing.JFrame {
         }
          catch (SQLException ex) {
             Logger.getLogger(ManageClientsUI.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Client not selected");
+            System.out.println(ex.getMessage());
             }
-        finally{
-            if (clientName == null) {
-                System.out.println("Error");
-            }
-        }
 
     }//GEN-LAST:event_removeClientButtonActionPerformed
 
