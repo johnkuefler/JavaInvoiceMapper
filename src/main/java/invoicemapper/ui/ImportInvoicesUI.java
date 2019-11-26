@@ -212,6 +212,8 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
     }//GEN-LAST:event_chooseFileButtonActionPerformed
 
     private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
+       
+        
         FormatMapDataService formatMapDataService = new FormatMapDataService();
         String selectedClient = String.valueOf(clientSelect.getSelectedItem());
 
@@ -231,12 +233,16 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
         
         try {
             invoice.setDate(new SimpleDateFormat("MM/dd/yyyy").parse(dateText.getText()));
+            invoice.setAmount(Float.parseFloat(amountText.getText()));
         } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Date can Not Be Empty");
             Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        catch (NumberFormatException ex) {JOptionPane.showMessageDialog(this, "Amount Can Not Be Empty");
+            Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         invoice.setClientName(selectedClient);
-        invoice.setAmount(Float.parseFloat(amountText.getText()));
+        
         
         CsvInvoiceImporter importer = new CsvInvoiceImporter(format);
         try {
