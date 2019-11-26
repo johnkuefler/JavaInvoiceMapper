@@ -236,6 +236,11 @@ public class AgentSalesReportUI extends javax.swing.JFrame {
 
     private void clientSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientSelectActionPerformed
         try {
+            lblTotalSales.setText("0");
+            lblPayable.setText("0");
+            lblNonPayable.setText("0");
+            lblChargebacks.setText("0");
+            lblCommissions.setText("0");
             fetchAgentsForSelectedClient();
         } catch (SQLException ex) {
             Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
