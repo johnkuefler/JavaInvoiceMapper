@@ -130,6 +130,7 @@ public class ManageAgentsUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(agentListBox);
 
+        agentIdText.setActionCommand("<Not Set>");
         agentIdText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 agentIdTextActionPerformed(evt);
@@ -241,6 +242,8 @@ public class ManageAgentsUI extends javax.swing.JFrame {
                 .addContainerGap(51, Short.MAX_VALUE))
         );
 
+        agentIdText.getAccessibleContext().setAccessibleName("");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -250,7 +253,7 @@ public class ManageAgentsUI extends javax.swing.JFrame {
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void agentIdTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agentIdTextActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_agentIdTextActionPerformed
 
     private void firstNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameTextActionPerformed
@@ -293,44 +296,60 @@ public class ManageAgentsUI extends javax.swing.JFrame {
     }//GEN-LAST:event_agentListBoxValueChanged
 
     private void createUpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createUpdateButtonActionPerformed
-
-        String agentText = (String) agentListBox.getSelectedValue();
-
-        if (agentText == "Create New") {
-            selectedAgent.setId(agentIdText.getText());
-            selectedAgent.setFirstName(firstNameText.getText());
-            selectedAgent.setLastName(lastNameText.getText());
-
-            String selectedClient = String.valueOf(clientSelect.getSelectedItem());
-            selectedAgent.setClientName(selectedClient);
-            try {
-                agentDataService.Create(selectedAgent);
-                JOptionPane.showMessageDialog(this, "Agent created");
-            } catch (SQLException ex) {
-                Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            selectedAgent.setFirstName(firstNameText.getText());
-            selectedAgent.setLastName(lastNameText.getText());
-
-            try {
-                agentDataService.Update(selectedAgent);
-                JOptionPane.showMessageDialog(this, "Agent updated");
-            } catch (SQLException ex) {
-                Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
+       if (agentIdText.getText() == null || agentIdText.getText().length() > 10) {
+            JOptionPane.showMessageDialog(this, "Please make sure the ID has between 1-10 characters.");
+            agentIdText.setText("");
+       }
+        
+        if (firstNameText.getText() == null || firstNameText.getText().length() > 50) {
+            JOptionPane.showMessageDialog(this, "Please make sure the First name has between 1-50 characters.");
+            firstNameText.setText("");
         }
         
-        try {
-            fetchAgentsForSelectedClient();
-        } catch (SQLException ex) {
-            Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
+        if (lastNameText.getText() == null || lastNameText.getText().length() > 50) {
+            JOptionPane.showMessageDialog(this, "Please make sure the Last name has between 1-50 characters.");
+            lastNameText.setText("");
         }
+            
+        String agentText = (String) agentListBox.getSelectedValue();
+
+            if (agentText == "Create New") {
+
+                selectedAgent.setId(agentIdText.getText());
+                selectedAgent.setFirstName(firstNameText.getText());
+                selectedAgent.setLastName(lastNameText.getText());
+
+                String selectedClient = String.valueOf(clientSelect.getSelectedItem());
+                selectedAgent.setClientName(selectedClient);
+                try {
+                    agentDataService.Create(selectedAgent);
+                    JOptionPane.showMessageDialog(this, "Agent created");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "Please make sure the ID, First and last name are all valid and correct.");
+                    Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                selectedAgent.setFirstName(firstNameText.getText());
+                selectedAgent.setLastName(lastNameText.getText());
+
+                try {
+                    agentDataService.Update(selectedAgent);
+                    JOptionPane.showMessageDialog(this, "Agent updated");
+                } catch (SQLException ex) {
+                    Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            try {
+                fetchAgentsForSelectedClient();
+            } catch (SQLException ex) {
+                Logger.getLogger(ManageAgentsUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_createUpdateButtonActionPerformed
 
     /**
-     * @param args the command line arguments
-     */
+         * @param args the command line arguments
+         */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -366,6 +385,7 @@ public class ManageAgentsUI extends javax.swing.JFrame {
             }
         });
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField agentIdText;
