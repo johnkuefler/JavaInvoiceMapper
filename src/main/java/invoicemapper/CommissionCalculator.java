@@ -6,6 +6,18 @@
 package invoicemapper;
 
 import invoicemapper.lib.Sale;
+import java.text.NumberFormat;
+
+/**
+ *
+ * @author johnk
+ */
+public class CommissionCalculator {
+
+    private float commissionRate;
+    private Sale sale;
+
+    
 
 /**
  *
