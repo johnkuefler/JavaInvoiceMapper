@@ -262,6 +262,8 @@ public class ImportInvoicesUI extends javax.swing.JFrame {
             }
             
             JOptionPane.showMessageDialog(this, "Invoice imported successfully!");
+            dateText.setText("");
+            amountText.setText("");
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ImportInvoicesUI.class.getName()).log(Level.SEVERE, null, ex);
