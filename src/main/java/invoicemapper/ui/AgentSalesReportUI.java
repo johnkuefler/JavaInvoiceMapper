@@ -12,7 +12,10 @@ import invoicemapper.lib.Agent;
 import invoicemapper.lib.Client;
 import invoicemapper.lib.Sale;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -28,7 +31,8 @@ public class AgentSalesReportUI extends javax.swing.JFrame {
     private ClientDataService clientDataService;
     private AgentDataService agentDataService;
     private SaleDataService saleDataService;
-
+    NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+    
     /**
      * Creates new form AgentSalesReportUI
      */
@@ -281,7 +285,7 @@ public class AgentSalesReportUI extends javax.swing.JFrame {
             lblPayable.setText(String.valueOf(totalPayable));
             lblNonPayable.setText(String.valueOf(totalNonPayable));
             lblChargebacks.setText(String.valueOf(totalChargebacks));
-            lblCommissions.setText(String.valueOf(totalCommissions));
+            lblCommissions.setText(formatter.format((totalCommissions)));
 
         }
     }//GEN-LAST:event_agentListBoxValueChanged
