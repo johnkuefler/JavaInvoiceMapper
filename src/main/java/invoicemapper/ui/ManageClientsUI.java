@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -205,26 +206,20 @@ public class ManageClientsUI extends javax.swing.JFrame {
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void removeClientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeClientButtonActionPerformed
+        try {
         int rowIndex = jTable1.getSelectedRow();
         String clientName = jTable1.getValueAt(rowIndex,0).toString();
-        if (clientName == null) {
-            System.out.println("Error: Client not selected.");
-        }
-        else {
-                    try {
+         
                 this.clientDataService.Delete(clientName);
             
                 this.fetchClients();
                 
         }
          catch (SQLException ex) {
-            Logger.getLogger(ManageClientsUI.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(this, "Error: No client selected.","Error", JOptionPane.ERROR_MESSAGE);
+             Logger.getLogger(ManageClientsUI.class.getName()).log(Level.SEVERE, null, ex);
 
             }
-        }
-        
-
-
     }//GEN-LAST:event_removeClientButtonActionPerformed
 
     /**
