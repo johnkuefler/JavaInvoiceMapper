@@ -5,6 +5,8 @@
  */
 package invoicemapper.lib;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author johnk
@@ -17,6 +19,11 @@ public class Client {
     }
 
     public void setName(String name) {
+        if (name.length() >= 50){
+            JOptionPane.showMessageDialog(null,"Please enter a client name with less than 50 characters");
+        }
+        else{
         this.name = name;
+    }
     }
 }
